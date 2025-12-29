@@ -4,9 +4,8 @@ const APOD_URL = `https://api.nasa.gov/planetary/apod?api_key=${APIkey}`;
 function error() {
     const error = document.getElementById("apod-loading");
     document.getElementById("apod-image").classList.add("hidden");
-    console.log(error);
+    // console.log(error);
 }
-error()
 
 function hideLoader() {
     document.querySelector("#apod-loading").classList.add("hidden");
@@ -68,13 +67,7 @@ function setInitialDate() {
 function displayAPOD(APOD) {
 
     // displaying image
-    const img = document.getElementById('apod-image');
-    img.onload = () => {
-        hideLoader();
-    }
-    img.onerror = () => {
-        hideLoader();
-    }
+    let img = document.getElementById('apod-image');
     let newElement;
 
     if (APOD.media_type === "video") {
@@ -93,6 +86,13 @@ function displayAPOD(APOD) {
     }
 
     img.replaceWith(newElement);
+    img = newElement;
+    img.onload = () => {
+        hideLoader();
+    }
+    img.onerror = () => {
+        hideLoader();
+    }
 
     // opening full res img
     APOD.hdurl ?
@@ -138,6 +138,8 @@ function setDateChosen() {
         dateField.setAttribute("value", dateField.value);
         const dateFormatted = new Date(dateField.value).toLocaleDateString('us-en', { month: "short", day: "2-digit", year: "numeric" });
         dateField.nextElementSibling.innerHTML = dateFormatted;
+        const maxDate = new Date().toLocaleDateString('us-en', { month: "short", day: "2-digit", year: "numeric" });
+        dateField.setAttribute("max", maxDate);
     });
 }
 
