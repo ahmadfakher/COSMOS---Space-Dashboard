@@ -57,11 +57,12 @@ async function getAPOD(date = "today") {
 function setInitialDate() {
     const dateField = document.getElementById("apod-date-input");
     const date = new Date();
-    const dateFormatted = date.toLocaleDateString('us-en', { month: "short", day: "2-digit", year: "numeric" });
+    const dateFormatted = date.toLocaleDateString('us-en', {month: "short", day: "2-digit", year: "numeric" });
     const dateValue = `${date.getFullYear()}-${date.getMonth() + 1 > 9 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`}-${date.getDate() > 9 ? date.getDate() : `0${date.getDate()}`}`;
     dateField.setAttribute("value", dateValue);
     dateField.value = dateValue;
-    dateField.nextElementSibling.innerHTML = dateFormatted
+    dateField.nextElementSibling.innerHTML = dateFormatted;
+    dateField.setAttribute("max", dateValue);
 }
 
 function displayAPOD(APOD) {
@@ -138,8 +139,6 @@ function setDateChosen() {
         dateField.setAttribute("value", dateField.value);
         const dateFormatted = new Date(dateField.value).toLocaleDateString('us-en', { month: "short", day: "2-digit", year: "numeric" });
         dateField.nextElementSibling.innerHTML = dateFormatted;
-        const maxDate = new Date().toLocaleDateString('us-en', { month: "short", day: "2-digit", year: "numeric" });
-        dateField.setAttribute("max", maxDate);
     });
 }
 
