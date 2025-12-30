@@ -1,10 +1,50 @@
 const APIkey = 'HsE4klHCKxFhJsvpec8wbdrB7F2ejkwOQvwdDeF3';
 const APOD_URL = `https://api.nasa.gov/planetary/apod?api_key=${APIkey}`;
 
-function error() {
+//* DONE navigation logic
+
+function toggleScreens() {
+    const screenButtons = document.querySelectorAll("nav a");
+    const screens = document.querySelectorAll("section");
+    screenButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            screenButtons.forEach(screenbutton => {
+                screenbutton.classList.remove("bg-blue-500/10", "text-blue-400");
+                screenbutton.classList.add("text-slate-300", "hover:bg-slate-800");
+            });
+            button.classList.remove("text-slate-300", "hover:bg-slate-800");
+            button.classList.add("bg-blue-500/10", "text-blue-400");
+            screens.forEach(screen => {
+                screen.classList.add("hidden");
+                if (screen.id === button.dataset.section) {
+                    screen.classList.remove("hidden");
+                }
+            });
+        });
+    });
+}
+
+toggleScreens();
+
+
+//* DONE Today in space
+
+function displayError() {
     const error = document.getElementById("apod-loading");
+    error.classList.remove("hidden");
     document.getElementById("apod-image").classList.add("hidden");
-    // console.log(error);
+    document.getElementById("apod-image").nextElementSibling.classList.add("hidden");
+    const icon = error.querySelector("i");
+    icon.querySelector("svg").classList.replace("fa-spinner", "fa-triangle-exclamation");
+    icon.querySelector("svg").classList.remove("fa-spin");
+    icon.classList.replace("text-blue-400", "text-red-400")
+    icon.nextElementSibling.innerHTML = "Failed to load image";
+    document.getElementById("apod-title").classList.add("hidden");
+    document.getElementById("apod-date-detail").innerHTML = '<i class="far fa-calendar mr-2"></i>Invalid Date';
+    document.getElementById("apod-explanation").classList.add("hidden");
+    document.getElementById("apod-copyright").classList.add("hidden");
+    document.getElementById("apod-date-info").innerHTML = "Invalid Date";
+    document.getElementById("apod-date").innerHTML = "Astronomy Picture of the Day - Invalid Date";
 }
 
 function hideLoader() {
@@ -13,15 +53,22 @@ function hideLoader() {
 }
 
 function showLoader() {
-    document.querySelector("#apod-loading").classList.remove("hidden");
+    const loading = document.getElementById("apod-loading");
+    const icon = loading.querySelector("i");
+    icon.querySelector("svg").classList.replace("fa-triangle-exclamation", "fa-spinner");
+    icon.querySelector("svg").classList.add("fa-spin");
+    icon.classList.replace("text-red-400", "text-blue-400");
+    icon.nextElementSibling.innerHTML = "Loading today's image...";
+    document.getElementById("apod-title").classList.remove("hidden");
+    document.getElementById("apod-explanation").classList.remove("hidden");
+    document.getElementById("apod-copyright").classList.remove("hidden");
+    loading.classList.remove("hidden");
     document.querySelector("#apod-image").classList.add("hidden");
     document.getElementById("apod-title").innerHTML = "Loading...";
     document.getElementById("apod-date-detail").innerHTML = '<i class="far fa-calendar mr-2"></i>Loading...';
     document.getElementById("apod-explanation").innerHTML = "Loading description...";
     document.getElementById("apod-copyright").classList.add("hidden");
-    document.getElementById("apod-explanation").innerHTML = "Loading description...";
     document.getElementById("apod-date-info").innerHTML = "Loading...";
-
 }
 
 function AddEventToAPODButton() {
@@ -46,18 +93,22 @@ async function getAPOD(date = "today") {
 
         // get data and display it
         const dataJson = await data.json();
-        displayAPOD(dataJson);
+        if (dataJson.code === 400) {
+            throw new Error(dataJson.msg);
+        }
+        else {
+            displayAPOD(dataJson);
+        }
     }
     catch (err) {
-        console.log(err);
-        hideLoader();
+        displayError();
     }
 }
 
 function setInitialDate() {
     const dateField = document.getElementById("apod-date-input");
     const date = new Date();
-    const dateFormatted = date.toLocaleDateString('us-en', {month: "short", day: "2-digit", year: "numeric" });
+    const dateFormatted = date.toLocaleDateString('us-en', { month: "short", day: "2-digit", year: "numeric" });
     const dateValue = `${date.getFullYear()}-${date.getMonth() + 1 > 9 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`}-${date.getDate() > 9 ? date.getDate() : `0${date.getDate()}`}`;
     dateField.setAttribute("value", dateValue);
     dateField.value = dateValue;
@@ -155,3 +206,14 @@ setInitialDate();
 AddEventToAPODButton();
 AddEventToLoadButton();
 setDateChosen();
+
+
+// TODO: Launches
+
+async function getLaunches() {
+    const launches = await fetch("https://lldev.thespacedevs.com/2.3.0/launches/upcoming/?limit=10");
+    const launchesJson = await launches.json();
+    console.log("🚀 - getLaunches - launchesJson:", launchesJson.results);
+}
+
+getLaunches();
