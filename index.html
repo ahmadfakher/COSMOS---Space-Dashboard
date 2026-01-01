@@ -229,24 +229,24 @@
                       <i class="fas fa-star"></i>
                       Featured Launch
                     </span>
-                    <span class="px-4 py-1.5 bg-green-500/20 text-green-400 rounded-full text-sm font-semibold">
+                    <span id="status" class="px-4 py-1.5 bg-green-500/20 text-green-400 rounded-full text-sm font-semibold">
                       Go
                     </span>
                   </div>
-                  <h3 class="text-3xl font-bold mb-3 leading-tight">
+                  <h3 id="title" class="text-3xl font-bold mb-3 leading-tight">
                     Starship Flight 3
                   </h3>
                   <div class="flex flex-col xl:flex-row xl:items-center gap-4 mb-6 text-slate-400">
                     <div class="flex items-center gap-2">
                       <i class="fas fa-building"></i>
-                      <span>SpaceX</span>
+                      <span id="service-prodvider">SpaceX</span>
                     </div>
                     <div class="flex items-center gap-2">
                       <i class="fas fa-rocket"></i>
-                      <span>Starship</span>
+                      <span id="name">Starship</span>
                     </div>
                   </div>
-                  <div
+                  <div id="days-left"
                     class="inline-flex items-center gap-3 px-6 py-3 bg-linear-to-r from-blue-500/20 to-purple-500/20 rounded-xl mb-6">
                     <i class="fas fa-clock text-2xl text-blue-400"></i>
                     <div>
@@ -260,31 +260,31 @@
                         <i class="fas fa-calendar"></i>
                         Launch Date
                       </p>
-                      <p class="font-semibold">March 14, 2024</p>
+                      <p class="font-semibold" id="launch-date">March 14, 2024</p>
                     </div>
                     <div class="bg-slate-900/50 rounded-xl p-4">
                       <p class="text-xs text-slate-400 mb-1 flex items-center gap-2">
                         <i class="fas fa-clock"></i>
                         Launch Time
                       </p>
-                      <p class="font-semibold">12:00 PM UTC</p>
+                      <p class="font-semibold" id="launch-time">12:00 PM UTC</p>
                     </div>
                     <div class="bg-slate-900/50 rounded-xl p-4">
                       <p class="text-xs text-slate-400 mb-1 flex items-center gap-2">
                         <i class="fas fa-map-marker-alt"></i>
                         Location
                       </p>
-                      <p class="font-semibold text-sm">Starbase, Texas</p>
+                      <p id="location" class="font-semibold text-sm">Starbase, Texas</p>
                     </div>
                     <div class="bg-slate-900/50 rounded-xl p-4">
                       <p class="text-xs text-slate-400 mb-1 flex items-center gap-2">
                         <i class="fas fa-globe"></i>
                         Country
                       </p>
-                      <p class="font-semibold">USA</p>
+                      <p class="font-semibold" id="country">USA</p>
                     </div>
                   </div>
-                  <p class="text-slate-300 leading-relaxed mb-6">
+                  <p class="text-slate-300 leading-relaxed mb-6" id="description">
                     The third integrated flight test of Starship. The
                     prototype for the heavy-lift launch vehicle is currently
                     being built by SpaceX.
@@ -309,9 +309,7 @@
               <div class="relative">
                 <div class="relative h-full min-h-[400px] rounded-2xl overflow-hidden bg-slate-900/50">
                   <!-- Placeholder image/icon since we can't load external images reliably without correct URLs -->
-                  <div class="flex items-center justify-center h-full min-h-[400px] bg-slate-800">
-                    <i class="fas fa-rocket text-9xl text-slate-700/50"></i>
-                  </div>
+                  <img src="./assets/images/launch-placeholder.png" alt="" class="w-full h-full object-cover" id="rocket-img">
                   <div class="absolute inset-0 bg-linear-to-t from-slate-900 via-transparent to-transparent"></div>
                 </div>
               </div>
@@ -322,156 +320,6 @@
           <h3 class="text-xl font-semibold mb-4">All Upcoming Launches</h3>
         </div>
         <div id="launches-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- STATIC LAUNCH CARD 1 -->
-          <div
-            class="bg-slate-800/50 border border-slate-700 rounded-2xl overflow-hidden hover:border-blue-500/30 transition-all group cursor-pointer">
-            <div class="relative h-48 bg-slate-900/50 flex items-center justify-center">
-              <i class="fas fa-space-shuttle text-5xl text-slate-700"></i>
-              <div class="absolute top-3 right-3">
-                <span class="px-3 py-1 bg-green-500/90 text-white backdrop-blur-sm rounded-full text-xs font-semibold">
-                  Go
-                </span>
-              </div>
-            </div>
-            <div class="p-5">
-              <div class="mb-3">
-                <h4 class="font-bold text-lg mb-2 line-clamp-2 group-hover:text-blue-400 transition-colors">
-                  Falcon 9 Block 5 | Starlink Group 6-44
-                </h4>
-                <p class="text-sm text-slate-400 flex items-center gap-2">
-                  <i class="fas fa-building text-xs"></i>
-                  SpaceX
-                </p>
-              </div>
-              <div class="space-y-2 mb-4">
-                <div class="flex items-center gap-2 text-sm">
-                  <i class="fas fa-calendar text-slate-500 w-4"></i>
-                  <span class="text-slate-300">Mar 15, 2024</span>
-                </div>
-                <div class="flex items-center gap-2 text-sm">
-                  <i class="fas fa-clock text-slate-500 w-4"></i>
-                  <span class="text-slate-300">23:00 UTC</span>
-                </div>
-                <div class="flex items-center gap-2 text-sm">
-                  <i class="fas fa-rocket text-slate-500 w-4"></i>
-                  <span class="text-slate-300">Falcon 9</span>
-                </div>
-                <div class="flex items-center gap-2 text-sm">
-                  <i class="fas fa-map-marker-alt text-slate-500 w-4"></i>
-                  <span class="text-slate-300 line-clamp-1">KSC, LC-39A</span>
-                </div>
-              </div>
-              <div class="flex items-center gap-2 pt-4 border-t border-slate-700">
-                <button
-                  class="flex-1 px-4 py-2 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors text-sm font-semibold">
-                  Details
-                </button>
-                <button class="px-3 py-2 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors">
-                  <i class="far fa-heart"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-          <!-- STATIC LAUNCH CARD 2 -->
-          <div
-            class="bg-slate-800/50 border border-slate-700 rounded-2xl overflow-hidden hover:border-blue-500/30 transition-all group cursor-pointer">
-            <div class="relative h-48 bg-slate-900/50 flex items-center justify-center">
-              <i class="fas fa-rocket text-5xl text-slate-700"></i>
-              <div class="absolute top-3 right-3">
-                <span class="px-3 py-1 bg-yellow-500/90 text-white backdrop-blur-sm rounded-full text-xs font-semibold">
-                  TBC
-                </span>
-              </div>
-            </div>
-            <div class="p-5">
-              <div class="mb-3">
-                <h4 class="font-bold text-lg mb-2 line-clamp-2 group-hover:text-blue-400 transition-colors">
-                  Electron | "Owl Night Long"
-                </h4>
-                <p class="text-sm text-slate-400 flex items-center gap-2">
-                  <i class="fas fa-building text-xs"></i>
-                  Rocket Lab
-                </p>
-              </div>
-              <div class="space-y-2 mb-4">
-                <div class="flex items-center gap-2 text-sm">
-                  <i class="fas fa-calendar text-slate-500 w-4"></i>
-                  <span class="text-slate-300">Mar 16, 2024</span>
-                </div>
-                <div class="flex items-center gap-2 text-sm">
-                  <i class="fas fa-clock text-slate-500 w-4"></i>
-                  <span class="text-slate-300">09:15 UTC</span>
-                </div>
-                <div class="flex items-center gap-2 text-sm">
-                  <i class="fas fa-rocket text-slate-500 w-4"></i>
-                  <span class="text-slate-300">Electron</span>
-                </div>
-                <div class="flex items-center gap-2 text-sm">
-                  <i class="fas fa-map-marker-alt text-slate-500 w-4"></i>
-                  <span class="text-slate-300 line-clamp-1">Mahia Peninsula, NZ</span>
-                </div>
-              </div>
-              <div class="flex items-center gap-2 pt-4 border-t border-slate-700">
-                <button
-                  class="flex-1 px-4 py-2 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors text-sm font-semibold">
-                  Details
-                </button>
-                <button class="px-3 py-2 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors">
-                  <i class="far fa-heart"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-          <!-- STATIC LAUNCH CARD 3 -->
-          <div
-            class="bg-slate-800/50 border border-slate-700 rounded-2xl overflow-hidden hover:border-blue-500/30 transition-all group cursor-pointer">
-            <div class="relative h-48 bg-slate-900/50 flex items-center justify-center">
-              <i class="fas fa-satellite-dish text-5xl text-slate-700"></i>
-              <div class="absolute top-3 right-3">
-                <span class="px-3 py-1 bg-blue-500/90 text-white backdrop-blur-sm rounded-full text-xs font-semibold">
-                  TBD
-                </span>
-              </div>
-            </div>
-            <div class="p-5">
-              <div class="mb-3">
-                <h4 class="font-bold text-lg mb-2 line-clamp-2 group-hover:text-blue-400 transition-colors">
-                  Ariane 6 | Maiden Flight
-                </h4>
-                <p class="text-sm text-slate-400 flex items-center gap-2">
-                  <i class="fas fa-building text-xs"></i>
-                  Arianespace
-                </p>
-              </div>
-              <div class="space-y-2 mb-4">
-                <div class="flex items-center gap-2 text-sm">
-                  <i class="fas fa-calendar text-slate-500 w-4"></i>
-                  <span class="text-slate-300">June 2024</span>
-                </div>
-                <div class="flex items-center gap-2 text-sm">
-                  <i class="fas fa-clock text-slate-500 w-4"></i>
-                  <span class="text-slate-300">TBD</span>
-                </div>
-                <div class="flex items-center gap-2 text-sm">
-                  <i class="fas fa-rocket text-slate-500 w-4"></i>
-                  <span class="text-slate-300">Ariane 62</span>
-                </div>
-                <div class="flex items-center gap-2 text-sm">
-                  <i class="fas fa-map-marker-alt text-slate-500 w-4"></i>
-                  <span class="text-slate-300 line-clamp-1">Guiana Space Centre</span>
-                </div>
-              </div>
-              <div class="flex items-center gap-2 pt-4 border-t border-slate-700">
-                <button
-                  class="flex-1 px-4 py-2 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors text-sm font-semibold">
-                  Details
-                </button>
-                <button class="px-3 py-2 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors">
-                  <i class="far fa-heart"></i>
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>

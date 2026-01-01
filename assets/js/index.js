@@ -208,12 +208,137 @@ AddEventToLoadButton();
 setDateChosen();
 
 
-// TODO: Launches
+//* DONE Launches
 
 async function getLaunches() {
     const launches = await fetch("https://lldev.thespacedevs.com/2.3.0/launches/upcoming/?limit=10");
     const launchesJson = await launches.json();
-    console.log("🚀 - getLaunches - launchesJson:", launchesJson.results);
+    displayFeatured(launchesJson.results[0]);
+    displayLaunches(launchesJson.results);
+}
+
+function displayFeatured(featured) {
+    const fulldate = new Date(featured.net);
+    const date = fulldate.toLocaleDateString('us-en', {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+    })
+    const time = fulldate.toLocaleTimeString('us-en', {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+        timeZone: "utc",
+        timeZoneName: "short",
+    });
+    const daysRemaining = Math.ceil((fulldate - new Date()) / (1000 * 60 * 60 * 24));
+    document.querySelector("#featured-launch #status").innerHTML = featured.status.abbrev;
+    document.querySelector("#featured-launch #title").innerHTML = featured.name;
+    document.querySelector("#featured-launch #service-prodvider").innerHTML = featured.launch_service_provider.name;
+    document.querySelector("#featured-launch #name").innerHTML = featured.rocket.configuration.name;
+    document.querySelector("#featured-launch #launch-date").innerHTML = date;
+    document.querySelector("#featured-launch #launch-time").innerHTML = time;
+    document.querySelector("#featured-launch #location").innerHTML = featured.pad.location.name;
+    document.querySelector("#featured-launch #country").innerHTML = featured.pad.country.name;
+    document.querySelector("#featured-launch #description").innerHTML = featured.mission.description;
+
+    const daysLeft = document.querySelector("#featured-launch #days-left");
+    if (daysRemaining > 0) {
+        daysLeft.classList.remove("hidden");
+        daysLeft.querySelector("div p:first-child").innerHTML = daysRemaining;
+    }
+    else {
+        daysLeft.classList.add("hidden");
+    }
+
+    const img = document.querySelector("#featured-launch #rocket-img");
+    featured.image.image_url ?
+        img.src = featured.image.image_url :
+        img.src = "./assets/images/launch-placeholder.png";
+    img.onerror = () => {
+        img.src = "./assets/images/launch-placeholder.png";
+    }
+    img.alt = featured.name;
+}
+
+function displayLaunches(launches) {
+    let blackbox = ``;
+    for (let i = 1; i < launches.length; i++) {
+        const fulldate = new Date(launches[i].net);
+        const date = fulldate.toLocaleDateString('us-en', {
+            month: "short",
+            day: "numeric",
+            year: "numeric"
+        });
+        const time = fulldate.toLocaleTimeString('us-en', {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+            timeZone: "utc",
+            timeZoneName: "short",
+        });
+        blackbox += `
+        <div
+            class="bg-slate-800/50 border border-slate-700 rounded-2xl overflow-hidden hover:border-blue-500/30 transition-all group cursor-pointer">
+            <div class="relative h-48 bg-slate-900/50 flex items-center justify-center">
+                <img src= ${launches[i].image.image_url ? launches[i].image.image_url : '/assets/images/launch-placeholder.png'} alt="Falcon 9 Block 5 | Pandora / Twilight rideshare mission" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                <div class="absolute top-3 right-3">
+                <span class="px-3 py-1 bg-green-500/90 text-white backdrop-blur-sm rounded-full text-xs font-semibold">
+                    ${launches[i].status.abbrev}
+                </span>
+                </div>
+            </div>
+            <div class="p-5">
+                <div class="mb-3">
+                <h4 class="font-bold text-lg mb-2 line-clamp-2 group-hover:text-blue-400 transition-colors">
+                    ${launches[i].name}
+                </h4>
+                <p class="text-sm text-slate-400 flex items-center gap-2">
+                    <i class="fas fa-building text-xs"></i>
+                    ${launches[i].launch_service_provider.name}
+                </p>
+                </div>
+                <div class="space-y-2 mb-4">
+                <div class="flex items-center gap-2 text-sm">
+                    <i class="fas fa-calendar text-slate-500 w-4"></i>
+                    <span class="text-slate-300">${date}</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm">
+                    <i class="fas fa-clock text-slate-500 w-4"></i>
+                    <span class="text-slate-300">${time}</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm">
+                    <i class="fas fa-rocket text-slate-500 w-4"></i>
+                    <span class="text-slate-300">${launches[i].rocket.configuration.name}</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm">
+                    <i class="fas fa-map-marker-alt text-slate-500 w-4"></i>
+                    <span class="text-slate-300 line-clamp-1">${launches[i].pad.location.name}</span>
+                </div>
+                </div>
+                <div class="flex items-center gap-2 pt-4 border-t border-slate-700">
+                <button
+                    class="flex-1 px-4 py-2 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors text-sm font-semibold">
+                    Details
+                </button>
+                <button class="px-3 py-2 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors">
+                    <i class="far fa-heart"></i>
+                </button>
+                </div>
+            </div>
+        </div>
+        `
+    }
+    document.querySelector("#launches-grid").innerHTML = blackbox;
+    document.querySelectorAll("#launches-grid img").forEach(img => {
+        img.onerror = () => {
+            img.src = "./assets/images/launch-placeholder.png";
+        };
+    });
 }
 
 getLaunches();
+
+
+// TODO: PLANETS
