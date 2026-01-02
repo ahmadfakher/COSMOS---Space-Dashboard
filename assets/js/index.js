@@ -210,8 +210,10 @@ setDateChosen();
 
 //* DONE Launches
 
+const launches_URL = "https://lldev.thespacedevs.com/2.3.0/launches/upcoming/?limit=10"
+
 async function getLaunches() {
-    const launches = await fetch("https://lldev.thespacedevs.com/2.3.0/launches/upcoming/?limit=10");
+    const launches = await fetch(launches_URL);
     const launchesJson = await launches.json();
     displayFeatured(launchesJson.results[0]);
     displayLaunches(launchesJson.results);
@@ -342,3 +344,61 @@ getLaunches();
 
 
 // TODO: PLANETS
+
+const planets_URL = "https://solar-system-opendata-proxy.vercel.app/api/planets";
+
+function addEventToPlanets(){
+    document.querySelectorAll("#planets-grid .planet-card").forEach(card => {
+        card.addEventListener("click", () => {
+            getPlanet(card.dataset.planetId);
+        });
+    });
+}
+
+let planetsData;
+(async function getPlanetData(){
+    const planets = await fetch(planets_URL);
+    const planetsJson = await planets.json();
+    planetsData = planetsJson;
+})();
+
+function getPlanet(planet){
+    planetsData.bodies.forEach(planetJson => {
+        if (planetJson.englishName.toLowerCase() === planet) {
+            displayPlanet(planetJson);
+            return;
+        }
+    });
+}
+
+function displayPlanet(planetData){
+    console.log(planetData);
+    document.querySelector("#planet-detail-image").src = `./assets/images/${planetData.englishName.toLowerCase()}.png`;
+    document.querySelector("#planet-detail-name").innerHTML = planetData.englishName;
+    document.querySelector("#planet-detail-description").innerHTML = planetData.description;
+    document.querySelector("#planet-distance").innerHTML = (planetData.semimajorAxis / 1000000).toFixed(1) + "M km";
+    document.querySelector("#planet-radius").innerHTML = Math.round(planetData.meanRadius) + " km";
+    document.querySelector("#planet-mass").innerHTML = `${planetData.mass.massValue} x 10<sup>${planetData.mass.massExponent}</sup> kg`;
+    document.querySelector("#planet-density").innerHTML = (planetData.density).toFixed(2) + " g/cm³";
+    document.querySelector("#planet-orbital-period").innerHTML = (planetData.sideralOrbit).toFixed(2) + " days";
+    document.querySelector("#planet-rotation").innerHTML = (planetData.sideralRotation).toFixed(2) + " hours";
+    document.querySelector("#planet-moons").innerHTML = planetData.moons ? planetData.moons.length : "0";
+    document.querySelector("#planet-gravity").innerHTML = planetData.gravity + " m/s²";
+
+
+    document.querySelector("#planet-discoverer").innerHTML = planetData.discoveredBy ? planetData.discoveredBy : "Known since antiquity";
+    document.querySelector("#planet-discovery-date").innerHTML = planetData.discoveryDate ? planetData.discoveryDate : "Ancient times";
+    document.querySelector("#planet-body-type").innerHTML = planetData.bodyType;
+    document.querySelector("#planet-volume").innerHTML = `${planetData.vol.volValue} x 10<sup>${planetData.vol.volExponent}</sup> km³`;
+    
+    
+    document.querySelector("#planet-perihelion").innerHTML = (planetData.perihelion/1000000).toFixed(1) + "M km";
+    document.querySelector("#planet-aphelion").innerHTML = (planetData.aphelion/1000000).toFixed(1) + "M km";
+    document.querySelector("#planet-eccentricity").innerHTML = planetData.eccentricity;
+    document.querySelector("#planet-inclination").innerHTML = (planetData.inclination).toFixed(2) + "°";
+    document.querySelector("#planet-axial-tilt").innerHTML = (planetData.axialTilt).toFixed(2) + "°";
+    document.querySelector("#planet-temp").innerHTML = planetData.avgTemp + "°C";
+    document.querySelector("#planet-escape").innerHTML = (planetData.escape/1000).toFixed(2) + " km/s";
+}
+
+addEventToPlanets();
