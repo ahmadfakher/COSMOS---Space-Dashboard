@@ -1,7 +1,26 @@
-const APIkey = 'HsE4klHCKxFhJsvpec8wbdrB7F2ejkwOQvwdDeF3';
-const APOD_URL = `https://api.nasa.gov/planetary/apod?api_key=${APIkey}`;
+//* DONE sideBar
+
+function toggleSideBar() {
+    const div = document.createElement("div");
+    div.classList.add("sidebar-overlay");
+    document.querySelector("#sidebar-toggle").addEventListener("click", () => {
+        document.querySelector("#sidebar").classList.add("sidebar-open");
+        document.body.appendChild(div);
+    });
+    div.addEventListener("click", e => {
+        if (e.target.id !== "sidebar" && document.querySelector("#sidebar").classList.contains("sidebar-open")) {
+            document.querySelector("#sidebar").classList.remove("sidebar-open");
+            document.body.removeChild(div);
+        }
+    });
+}
+
+toggleSideBar();
+
 
 //* DONE navigation logic
+const APIkey = 'HsE4klHCKxFhJsvpec8wbdrB7F2ejkwOQvwdDeF3';
+const APOD_URL = `https://api.nasa.gov/planetary/apod?api_key=${APIkey}`;
 
 function toggleScreens() {
     const screenButtons = document.querySelectorAll("nav a");
@@ -248,10 +267,12 @@ function displayFeatured(featured) {
     const daysLeft = document.querySelector("#featured-launch #days-left");
     if (daysRemaining > 0) {
         daysLeft.classList.remove("hidden");
+        daysLeft.classList.add("inline-flex");
         daysLeft.querySelector("div p:first-child").innerHTML = daysRemaining;
     }
     else {
         daysLeft.classList.add("hidden");
+        daysLeft.classList.remove("inline-flex");
     }
 
     const img = document.querySelector("#featured-launch #rocket-img");
@@ -343,11 +364,11 @@ function displayLaunches(launches) {
 getLaunches();
 
 
-// TODO: PLANETS
+//* DONE PLANETS
 
 const planets_URL = "https://solar-system-opendata-proxy.vercel.app/api/planets";
 
-function addEventToPlanets(){
+function addEventToPlanets() {
     document.querySelectorAll("#planets-grid .planet-card").forEach(card => {
         card.addEventListener("click", () => {
             getPlanet(card.dataset.planetId);
@@ -356,13 +377,14 @@ function addEventToPlanets(){
 }
 
 let planetsData;
-(async function getPlanetData(){
+
+(async function getPlanetData() {
     const planets = await fetch(planets_URL);
     const planetsJson = await planets.json();
     planetsData = planetsJson;
 })();
 
-function getPlanet(planet){
+function getPlanet(planet) {
     planetsData.bodies.forEach(planetJson => {
         if (planetJson.englishName.toLowerCase() === planet) {
             displayPlanet(planetJson);
@@ -371,8 +393,7 @@ function getPlanet(planet){
     });
 }
 
-function displayPlanet(planetData){
-    console.log(planetData);
+function displayPlanet(planetData) {
     document.querySelector("#planet-detail-image").src = `./assets/images/${planetData.englishName.toLowerCase()}.png`;
     document.querySelector("#planet-detail-name").innerHTML = planetData.englishName;
     document.querySelector("#planet-detail-description").innerHTML = planetData.description;
@@ -390,15 +411,111 @@ function displayPlanet(planetData){
     document.querySelector("#planet-discovery-date").innerHTML = planetData.discoveryDate ? planetData.discoveryDate : "Ancient times";
     document.querySelector("#planet-body-type").innerHTML = planetData.bodyType;
     document.querySelector("#planet-volume").innerHTML = `${planetData.vol.volValue} x 10<sup>${planetData.vol.volExponent}</sup> km³`;
-    
-    
-    document.querySelector("#planet-perihelion").innerHTML = (planetData.perihelion/1000000).toFixed(1) + "M km";
-    document.querySelector("#planet-aphelion").innerHTML = (planetData.aphelion/1000000).toFixed(1) + "M km";
+
+    document.querySelector("#planet-perihelion").innerHTML = (planetData.perihelion / 1000000).toFixed(1) + "M km";
+    document.querySelector("#planet-aphelion").innerHTML = (planetData.aphelion / 1000000).toFixed(1) + "M km";
     document.querySelector("#planet-eccentricity").innerHTML = planetData.eccentricity;
     document.querySelector("#planet-inclination").innerHTML = (planetData.inclination).toFixed(2) + "°";
     document.querySelector("#planet-axial-tilt").innerHTML = (planetData.axialTilt).toFixed(2) + "°";
     document.querySelector("#planet-temp").innerHTML = planetData.avgTemp + "°C";
-    document.querySelector("#planet-escape").innerHTML = (planetData.escape/1000).toFixed(2) + " km/s";
+    document.querySelector("#planet-escape").innerHTML = (planetData.escape / 1000).toFixed(2) + " km/s";
 }
 
+function addInitialData() {
+    console.log("hello");
+
+    let blackbox = "";
+    const planetColor = {
+        mercury: "#eab308",
+        venus: "#f97316",
+        earth: "#3b82f6",
+        mars: "#ef4444",
+        jupiter: "#fb923c",
+        saturn: "#facc15",
+        uranus: "#06b6d4",
+        neptune: "#2563eb"
+    };
+    const type = {
+        ice_giant: 'bg-blue-500/50 text-blue-200',
+        gas_giant: 'bg-yellow-500/50 text-yellow-200',
+        terrestrial: 'bg-red-500/50 text-red-200'
+    }
+    planetsData.bodies.forEach(planet => {
+        blackbox += `
+        <tr class="hover:bg-slate-800/30 transition-colors">
+            <td class="px-4 md:px-6 py-3 md:py-4 sticky left-0 bg-slate-800 z-10">
+                <div class="flex items-center space-x-2 md:space-x-3">
+                <div class="w-6 h-6 md:w-8 md:h-8 rounded-full flex-shrink-0" style="background-color: ${planetColor[planet.englishName.toLowerCase()]}">
+                </div>
+                <span class="font-semibold text-sm md:text-base whitespace-nowrap">${planetColor[planet.englishName]}</span>
+                </div>
+            </td>
+            <td class="px-4 md:px-6 py-3 md:py-4 text-slate-300 text-sm md:text-base whitespace-nowrap">
+                ${planet.distanceFromSun}
+            </td>
+            <td class="px-4 md:px-6 py-3 md:py-4 text-slate-300 text-sm md:text-base whitespace-nowrap">
+                ${planet.diameter}
+            </td>
+            <td class="px-4 md:px-6 py-3 md:py-4 text-slate-300 text-sm md:text-base whitespace-nowrap">
+                ${planet.mass}
+            </td>
+            <td class="px-4 md:px-6 py-3 md:py-4 text-slate-300 text-sm md:text-base whitespace-nowrap">
+                ${planet.orbitPeriod}
+            </td>
+            <td class="px-4 md:px-6 py-3 md:py-4 text-slate-300 text-sm md:text-base whitespace-nowrap">
+                ${planet.moons.length}
+            </td>
+            <td class="px-4 md:px-6 py-3 md:py-4 whitespace-nowrap">
+                <span class="px-2 py-1 rounded text-xs ${type[planet.bodyType.replace(" ", "_")]}">${planet.bodyType}</span>
+            </td>
+        </tr>
+        `;
+    });
+    document.getElementById("planet-comparison-tbody").innerHTML = blackbox;
+}
+
+function addPlanets() {
+    console.log("hi");
+
+    let blackbox = "";
+    const planetColor = {
+        mercury: "#eab308",
+        venus: "#f97316",
+        earth: "#3b82f6",
+        mars: "#ef4444",
+        jupiter: "#fb923c",
+        saturn: "#facc15",
+        uranus: "#06b6d4",
+        neptune: "#2563eb"
+    };
+    if (!planetsData) {
+        blackbox = `
+        <div class="col-span-full text-center py-8">
+            <i class="text-red-400 text-4xl mb-4" data-fa-i2svg=""><svg class="svg-inline--fa fa-triangle-exclamation" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="triangle-exclamation" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"></path></svg></i>
+            <p class="text-slate-400">Failed to load planets data. Please try again later.</p>
+        </div>
+        `;
+    }
+    else {
+        planetsData.bodies.forEach(planet => {
+            blackbox += `
+        <div
+            class="planet-card bg-slate-800/50 border border-slate-700 rounded-2xl p-4 transition-all cursor-pointer group"
+            data-planet-id="${planet.englishName.toLowerCase()}" style="--planet-color: ${planetColor[planet.englishName.toLowerCase()]}" onmouseover="this.style.borderColor= ${planetColor[planet.englishName.toLowerCase()]}80"
+            onmouseout="this.style.borderColor='#334155'">
+            <div class="relative mb-3 h-24 flex items-center justify-center">
+                <img class="w-20 h-20 object-contain group-hover:scale-110 transition-transform"
+                src="./assets/images/${planet.englishName.toLowerCase()}.png" alt="${planet.englishName}" />
+            </div>
+            <h4 class="font-semibold text-center text-sm">${planet.englishName}</h4>
+            <p class="text-xs text-slate-400 text-center">${planet.distanceFromSun} AU</p>
+        </div>
+        `;
+        });
+    }
+    document.getElementById("planets-grid").innerHTML = blackbox;
+}
+
+addPlanets();
+addInitialData();
 addEventToPlanets();
