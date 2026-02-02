@@ -19,7 +19,7 @@ toggleSideBar();
 
 
 //* DONE navigation logic
-const APIkey = 'HsE4klHCKxFhJsvpec8wbdrB7F2ejkwOQvwdDeF3';
+const APIkey = '<YOUR API HERE>';
 const APOD_URL = `https://api.nasa.gov/planetary/apod?api_key=${APIkey}`;
 
 function toggleScreens() {
